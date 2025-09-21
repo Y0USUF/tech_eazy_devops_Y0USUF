@@ -7,5 +7,6 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  default = "ubuntu" 
+  default = "key_pair" 
+
 }
