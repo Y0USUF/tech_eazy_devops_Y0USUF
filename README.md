@@ -23,7 +23,7 @@ This project demonstrates **Lift & Shift deployment** of a Java Spring MVC appli
 ```
 
 ---
-
+⚠️ Note: Ensure you have an existing AWS key pair (e.g., my-keypair) created in your region. Update the variables.tf file with your key pair name. The .pem file should be kept safe locally and never committed to GitHub.
 ## ⚙️ Prerequisites
 
 Before you begin, ensure you have the following installed on your local machine:
