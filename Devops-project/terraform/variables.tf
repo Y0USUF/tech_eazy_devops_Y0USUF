@@ -7,6 +7,7 @@ variable "instance_type" {
 }
 
 variable "key_name" {
-  default = "key_pair" 
+  default = "key_pair"           #replace key_pair with your key
 
 }
+
