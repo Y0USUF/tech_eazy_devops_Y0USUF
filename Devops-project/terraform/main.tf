@@ -36,13 +36,16 @@ resource "aws_security_group" "app_sg" {
 }
 
 resource "aws_instance" "dev_app" {
-  ami           = var.ami_id
-  instance_type = var.instance_type
-  key_name      = var.key_name
-
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
+  key_name               = var.key_name
   vpc_security_group_ids = [aws_security_group.app_sg.id]
 
-  user_data = file("${path.module}/../scripts/user_data.sh")
+  iam_instance_profile = aws_iam_instance_profile.role_b_profile.name
+
+  user_data = templatefile("${path.module}/../scripts/user_data.sh", {
+    bucket_name = var.bucket_name
+  })
 
   tags = {
     Name = "DevOpsApp"
