@@ -8,7 +8,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ./Devops-project/terraform
+        working-directory: Devops-project/terraform
 
     steps:
       - name: Checkout Repository
