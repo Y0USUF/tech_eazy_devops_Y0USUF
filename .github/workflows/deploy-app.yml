@@ -3,7 +3,7 @@ name: Build and Upload JAR to S3
 on:
   push:
     branches:
-      - main   # or Assignment3 branch
+      - Assignment3   # or Assignment3 branch
 
 jobs:
   build:
