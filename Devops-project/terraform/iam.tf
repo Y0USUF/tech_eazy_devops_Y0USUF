@@ -78,7 +78,3 @@ resource "aws_iam_instance_profile" "role_b_profile" {
   name = "s3-uploader-profile"
   role = aws_iam_role.role_b.name
 }
-resource "aws_iam_instance_profile" "role_b_profile" {
-  name = "s3-uploader-profile"
-  role = aws_iam_role.role_b.name
-}
