@@ -1,4 +1,4 @@
-# Role A (Read-Only)
+# Role A: Read-Only (S3 List + Get)
 resource "aws_iam_role" "role_a" {
   name = "s3-read-only-role"
   assume_role_policy = jsonencode({
@@ -16,11 +16,11 @@ resource "aws_iam_policy" "role_a_policy" {
   policy = jsonencode({
     Version = "2012-10-17"
     Statement = [{
-      Effect   = "Allow"
-      Action   = ["s3:ListBucket", "s3:GetObject"]
+      Effect = "Allow"
+      Action = ["s3:ListBucket", "s3:GetObject"]
       Resource = [
-        "arn:aws:s3:::${var.bucket_name}",
-        "arn:aws:s3:::${var.bucket_name}/*"
+        "arn:aws:s3:::${var.ec2_logs_bucket_name}",
+        "arn:aws:s3:::${var.ec2_logs_bucket_name}/*"
       ]
     }]
   })
@@ -31,7 +31,7 @@ resource "aws_iam_role_policy_attachment" "role_a_attach" {
   policy_arn = aws_iam_policy.role_a_policy.arn
 }
 
-# Role B (Uploader)
+# Role B: Uploader (S3 PutObject only)
 resource "aws_iam_role" "role_b" {
   name = "s3-uploader-role"
   assume_role_policy = jsonencode({
@@ -48,11 +48,23 @@ resource "aws_iam_policy" "role_b_policy" {
   name   = "s3-uploader-policy"
   policy = jsonencode({
     Version = "2012-10-17"
-    Statement = [{
-      Effect   = "Allow"
-      Action   = ["s3:PutObject"]
-      Resource = "arn:aws:s3:::${var.bucket_name}/*"
-    }]
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = ["s3:PutObject"]
+        Resource = "arn:aws:s3:::${var.ec2_logs_bucket_name}/*"
+      },
+      {
+        Effect = "Allow"
+        Action = ["s3:ListBucket"]
+        Resource = "arn:aws:s3:::${var.app_bucket_name}"
+      },
+      {
+        Effect = "Allow"
+        Action = ["s3:GetObject"]
+        Resource = "arn:aws:s3:::${var.app_bucket_name}/*"
+      }
+    ]
   })
 }
 
@@ -61,7 +73,7 @@ resource "aws_iam_role_policy_attachment" "role_b_attach" {
   policy_arn = aws_iam_policy.role_b_policy.arn
 }
 
-# Instance Profile for Role B (to attach to EC2)
+# Instance Profile for Role B (attach to EC2s)
 resource "aws_iam_instance_profile" "role_b_profile" {
   name = "s3-uploader-profile"
   role = aws_iam_role.role_b.name
